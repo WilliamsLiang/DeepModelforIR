@@ -1,5 +1,6 @@
 # NTCIR www project
 #### 本次项目主要针对NTCIR WWW的子任务所设置
+    NTCIR WWW的比赛网址：[http://sakailab.com/www3/](http://sakailab.com/www3/) 
 
 ## 1.模块介绍
 ### evalfunction
