@@ -8,7 +8,7 @@ class NDCG:
 
     def modifybaselines_general(self,all_dict):
         """
-        :param all_dict:数据规范{"docid":{"sim":人工相似度,"rank":排序位置}}
+        :param all_dict:数据规范{"docid":{"sim":人工相似度,"rank":理想排序位置}}
         :return:
         """
         self.baseDcg.modify_rank(all_dict)
@@ -16,7 +16,7 @@ class NDCG:
 
     def modifyrank_general(self,all_dict):
         """
-        :param all_dict:数据规范{"docid":{"sim":人工相似度,"rank":理想排序位置}}
+        :param all_dict:数据规范{"docid":{"sim":人工相似度,"rank":排序位置}}
         :return:
         """
         self.rankDcg.modify_rank(all_dict)

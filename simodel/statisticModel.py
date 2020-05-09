@@ -75,6 +75,62 @@ class BM25():
         self.D=tmp_dict["lenD"]
 
 
+class BigBM25:
+    def __init__(self,query_token,k1=1.5,b=0.75):
+        self.k1 = k1
+        self.b = b
+        self.idf = {} #文档中词的idf值
+        self.avgdl=0 #文档中平均文本长度
+        self.query_token = query_token
+
+    def loadCorpus(self,Corpus_file,wcindex=2):
+        """
+        :param Corpus_file: 计算好的文件，含p(w|c),文档集tokens数
+        :return:
+        """
+        tmp_dict={}
+        f=open(Corpus_file,"rt",encoding="utf=8")
+        for line in f.readlines():
+            datas=line.split("\t")
+            if(len(datas)<2):
+                continue
+            key=datas[0]
+            value=datas[wcindex]
+            tmp_dict[key]=float(value)
+        f.close()
+        for key in tmp_dict.keys():
+            if (key == "avg_len"):
+                self.avgdl = tmp_dict[key]
+                continue
+            elif (key == "all_tokens"):
+                continue
+            elif (key == "all_corpus"):
+                continue
+            self.idf[key]=math.log(tmp_dict["all_corpus"] - tmp_dict[key] + 0.5) - math.log(tmp_dict[key] + 0.5)
+        return self
+
+    def get_idf(self):
+        return self.idf
+
+    def search(self,doc_dict):
+        single_lenth=doc_dict["doc_lenth"]
+        tmp_dict = {}
+        for key in self.query_token.keys():
+            score = 0
+            for token in self.query_token[key]:
+                if (self.idf.get(token, 0) == 0):
+                    continue
+                score = score+(self.idf[token] * doc_dict.get(token,0) * (self.k1 + 1)/ (doc_dict.get(token,0) + self.k1 * (1 - self.b + self.b * single_lenth/ self.avgdl)))
+            tmp_dict[key] = score
+        return tmp_dict
+
+    def search_text(self,doc_text):
+        doc_dic={}
+        doc_dic["doc_lenth"]=len(doc_text)
+        for word in doc_text:
+            doc_dic[word]=doc_dic.get(word,0)+1
+        return self.search(doc_dic)
+
 if __name__=="__main__":
     docs = {}
     '''

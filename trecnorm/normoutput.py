@@ -1,3 +1,4 @@
+import re
 from evalfuntion.retrivalEval import NDCG
 
 
@@ -49,6 +50,7 @@ class trecEval():
         self.evalMethod=NDCG()
         self.simDict={}
         self.resultDict={}
+        self.value_re=re.compile("[a-zA-Z]")
         pass
 
     def load_trecFile(self,resultFile="",similarFile="",split_tag=" "):
@@ -121,7 +123,7 @@ class trecEval():
             else:
                 q_id = datas[qIndex]
             doc_id=datas[dIndex]
-            sim=datas[simIndex]
+            sim=self.get_value(datas[simIndex])
             self.simDict[q_id]=self.simDict.get(q_id,{})
             self.simDict[q_id][doc_id]={"sim":float(sim)}
             line=f.readline()
@@ -132,6 +134,9 @@ class trecEval():
             for i in range(len(sort_list)):
                 self.simDict[key][sort_list[i][0]]["rank"]=(i+1)
         return self
+
+    def get_value(self,value):
+        return self.value_re.sub("",value)
 
     def get_avgNDCG(self,n):
         """
@@ -160,7 +165,7 @@ class trecEval():
         for key in self.resultDict.keys():
             if (not self.simDict.get(key, {})):
                 continue
-            tmp_list=[[docid,resultdict[docid]] for docid in self.simDict[key].keys()]
+            tmp_list=[[docid,resultdict[key][docid]] for docid in self.simDict[key].keys() if(resultdict[key].get(docid,None))]
             tmp_list=sorted(tmp_list,key=lambda x:x[1]["rank"],reverse=False)
             tmp_dict={}
             for i in range(len(tmp_list)):
@@ -174,11 +179,22 @@ class trecEval():
 
 
 if __name__=="__main__":
-    similarFile="C:/Users/sfe_williamsL/Desktop/毕业论文/query_doc_similar.txt"
-    resultFile="C:/Users/sfe_williamsL/Desktop/毕业论文/BM25_query_long.txt"
+    similarFile="D:/任务_待解决/比赛_NTCIR/WWW-3数据/www2e.qrels"
+    resultFile="D:/任务_待解决/比赛_NTCIR/比赛结果/英文任务/ltr_rep_1.txt"
     evaltool=trecEval()
-    evaltool.loadSimilar(similarFile, qIndex=0, dIndex=1, simIndex=2, split_tag="\t")
-    evaltool.loadResult(resultFile,qIndex=0,dIndex=2,rankIndex=3,split_tag="\t")
+    evaltool.loadSimilar(similarFile, qIndex=0, dIndex=1, simIndex=2, split_tag=" ")
+    evaltool.loadResult(resultFile,qIndex=0,dIndex=2,rankIndex=3,split_tag=" ")
+    print(evaltool.get_avgNDCGfilter(1))
+    print(evaltool.get_avgNDCGfilter(5))
+    print(evaltool.get_avgNDCGfilter(10))
+    print(evaltool.get_avgNDCGfilter(20))
+    print("--------------------------")
+
+    similarFile = "D:/任务_待解决/比赛_NTCIR/WWW-3数据/www2e.qrels"
+    resultFile = "D:/任务_待解决/比赛_NTCIR/比赛结果/英文任务/ltr_rep_1.txt"
+    evaltool = trecEval()
+    evaltool.loadSimilar(similarFile, qIndex=0, dIndex=1, simIndex=2, split_tag=" ")
+    evaltool.loadResult(resultFile, qIndex=0, dIndex=2, rankIndex=3, split_tag=" ")
     print(evaltool.get_avgNDCG(1))
     print(evaltool.get_avgNDCG(5))
     print(evaltool.get_avgNDCG(10))
