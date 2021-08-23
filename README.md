@@ -42,12 +42,10 @@ NTCIR WWW的比赛网址：[http://sakailab.com/www3/](http://sakailab.com/www3/
 
 ## 2.数据资源
     数据资源分为中文子任务和英文子任务
-    服务器地址：192.168.116.123
     中文数据地址文件夹：/home/user/ntcir_match/zh_task
     英文数据地址文件夹：/home/user/ntcir_match/en_task
     
     模型特征说明文档：LambdaMart模型特征集.xlsx
-    其他资料见群文件：群号码：NRCIR WWW交流群 805627385
 
 ## 3.相关文献
     1.LMIR:A Study of Smoothing Methods for Language Models Applied to Information Retrieval[J].
