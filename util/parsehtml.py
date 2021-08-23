@@ -80,6 +80,12 @@ class HtmlInfo:
         result= [pt_stemmer.stem(w.lower()) for tmp in tmp_list for w in pat_letter.findall(tmp) if(w not in cachedStopWords)]
         return result
 
+    def get_text(self,tag):
+        return " ".join(self.bsmodel.get_text(tag))
+
+    def get_sentenceList(self,tag):
+        return self.bsmodel.get_text(tag)
+
     def get_tokendict(self,tag):
         tmp_list = self.bsmodel.get_text(tag)
         tmp_dict = {"doc_lenth":0}
@@ -88,7 +94,6 @@ class HtmlInfo:
             for token in tag_list:
                 if (token in cachedStopWords):
                     continue
-
                 token=pt_stemmer.stem(token.lower())
                 tmp_dict[token]=tmp_dict.get(token,0)+1
                 tmp_dict["doc_lenth"]=tmp_dict["doc_lenth"]+1

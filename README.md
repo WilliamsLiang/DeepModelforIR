@@ -69,3 +69,6 @@ NTCIR WWW的比赛网址：[http://sakailab.com/www3/](http://sakailab.com/www3/
     参数：评价函数MAP 正反样本比1：3 
     n_estimators=5000 learning_rate=0.02 max_features=0.5 query_subsample=0.5 max_leaf_nodes=10 min_samples_leaf=64 verbose=1 
     （ltrnorm 输出的样本不是按qid group 后续利用Linux 命令排序 sort -n -k 2.5,2.8 filename）
+
+### 20210823_lz_01
+    增加了BERTforIR、DSSM、DRMM模型
